@@ -41,10 +41,11 @@ app.get("/:id",redirectFromShortUrl)
 
 app.use(errorHandler)
 
+connectDB();
+
 if(process.env.NODE_ENV !== "production"){
   const PORT = process.env.PORT || 3000;
   app.listen(PORT,()=>{
-      connectDB();
       console.log(`Server running on port ${PORT}`);
   });
 }
