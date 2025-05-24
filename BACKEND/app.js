@@ -34,10 +34,14 @@ app.get("/:id",redirectFromShortUrl)
 
 app.use(errorHandler)
 
-const PORT = process.env.PORT || 3000;
-app.listen(PORT,()=>{
-    connectDB();
-    console.log(`Server running on port ${PORT}`);
-})
+if(process.env.NODE_ENV !== "production"){
+  const PORT = process.env.PORT || 3000;
+  app.listen(PORT,()=>{
+      connectDB();
+      console.log(`Server running on port ${PORT}`);
+  });
+}
 
-// GET - Redirection 
+
+// Export server for Vercel
+export default app;
