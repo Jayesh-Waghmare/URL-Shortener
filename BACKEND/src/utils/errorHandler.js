@@ -1,5 +1,7 @@
 
-export const errorHandler = (err,req,res,next) => {
+export const errorHandler = (err, req, res, next) => {
+  console.error('Error:', err);
+  
   if (err instanceof AppError) {
     return res.status(err.statusCode).json({
       success: false,
@@ -10,6 +12,7 @@ export const errorHandler = (err,req,res,next) => {
   res.status(500).json({
     success: false,
     message: err.message || "Internal Server Error",
+    stack: process.env.NODE_ENV === 'production' ? 'On production' : err.stack,
   });
 };
 

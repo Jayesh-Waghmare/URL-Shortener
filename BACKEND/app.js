@@ -1,6 +1,7 @@
 import express from "express";
 import {nanoid} from "nanoid"
 import dotenv from "dotenv"
+import mongoose from "mongoose"
 import connectDB from "./src/config/monogo.config.js"
 import short_url from "./src/routes/short_url.route.js"
 import user_routes from "./src/routes/user.routes.js"
@@ -69,13 +70,18 @@ app.use(errorHandler)
 
 if(process.env.NODE_ENV !== "production"){
   const PORT = process.env.PORT || 3000;
-  app.listen(PORT,()=>{
-      connectDB();
+  app.listen(PORT, async () => {
+    try {
+      await connectDB();
       console.log(`Server running on port ${PORT}`);
+    } catch (error) {
+      console.error('Failed to start server:', error);
+    }
   });
 } else {
   // In production, connect to DB but don't start a server (Vercel handles this)
-  connectDB();
+  // Don't await here as it might cause issues with Vercel's serverless functions
+  connectDB().catch(err => console.error('MongoDB connection error:', err));
 }
 
 
