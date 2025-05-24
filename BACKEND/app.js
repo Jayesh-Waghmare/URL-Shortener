@@ -30,6 +30,10 @@ app.use(cookieParser())
 
 app.use(attachUser)
 
+console.log("Registering short_url routes");
+app.use("/api/create", short_url);
+
+
 app.get("/api/health", (req, res) => {
   try {
     // Check MongoDB connection status
