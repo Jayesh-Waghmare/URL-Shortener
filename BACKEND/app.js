@@ -79,11 +79,46 @@ if(process.env.NODE_ENV !== "production"){
     }
   });
 } else {
-  // In production, connect to DB but don't start a server (Vercel handles this)
-  // Don't await here as it might cause issues with Vercel's serverless functions
-  connectDB().catch(err => console.error('MongoDB connection error:', err));
-}
+  // In production, ensure MongoDB connection is established before handling requests
+  let isConnecting = false;
+  let connectionPromise = null;
 
+  const ensureConnection = async () => {
+    if (mongoose.connection.readyState === 1) return;
+    
+    if (isConnecting) {
+      return connectionPromise;
+    }
+
+    isConnecting = true;
+    connectionPromise = connectDB()
+      .then(() => {
+        console.log('MongoDB connected successfully');
+        isConnecting = false;
+      })
+      .catch(err => {
+        console.error('MongoDB connection error:', err);
+        isConnecting = false;
+        throw err;
+      });
+
+    return connectionPromise;
+  };
+
+  // Add middleware to ensure DB connection before handling requests
+  app.use(async (req, res, next) => {
+    try {
+      await ensureConnection();
+      next();
+    } catch (error) {
+      res.status(500).json({ 
+        status: "error", 
+        message: "Database connection failed",
+        error: error.message 
+      });
+    }
+  });
+}
 
 // Export server for Vercel
 export default app;
