@@ -4,8 +4,8 @@ A full-stack URL shortener application built with React, Node.js, Express, and M
 
 ## 🌐 Live URLs
 
-<strong>Frontend</strong>: <a href="https://url-shortener-chi-steel.vercel.app">https://url-shortener-chi-steel.vercel.app</a><br>
-<strong>Backend (API Health)</strong>: <a href="https://url-shortener-backend-olive.vercel.app/api/health">https://url-shortener-backend-olive.vercel.app/api/health</a>
+- <strong>Frontend</strong>: <a href="https://url-shortener-chi-steel.vercel.app">https://url-shortener-chi-steel.vercel.app</a><br>
+- <strong>Backend (API Health)</strong>: <a href="https://url-shortener-backend-olive.vercel.app/api/health">https://url-shortener-backend-olive.vercel.app/api/health</a>
 
 **⚠️ Note: The backend must be live for the app to function correctly. It handles authentication, URL generation, redirection, and API requests.**
 
