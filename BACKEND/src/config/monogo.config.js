@@ -6,9 +6,15 @@ const connectDB = async () => {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     });
+    console.log(`MongoDB Connected: ${conn.connection.host}`);
+    return true;
   } catch (error) {
-    console.error(`Error: ${error.message}`);
-    process.exit(1);
+    console.error(`Error connecting to MongoDB: ${error.message}`);
+    // Don't exit process in production as it will crash the serverless function
+    if (process.env.NODE_ENV !== "production") {
+      process.exit(1);
+    }
+    return false;
   }
 };
 

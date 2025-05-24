@@ -31,7 +31,29 @@ app.use(cookieParser())
 app.use(attachUser)
 
 app.get("/api/health", (req, res) => {
-  res.status(200).json({ status: "ok", message: "API is running" });
+  try {
+    // Check MongoDB connection status
+    const isConnected = mongoose.connection.readyState === 1;
+    
+    res.status(200).json({ 
+      status: "ok", 
+      message: "API is running",
+      dbConnected: isConnected,
+      env: {
+        nodeEnv: process.env.NODE_ENV,
+        hasMongoUri: !!process.env.MONGO_URI,
+        hasJwtSecret: !!process.env.JWT_SECRET,
+        hasAppUrl: !!process.env.APP_URL,
+        hasFrontendUrl: !!process.env.FRONTEND_URL
+      }
+    });
+  } catch (error) {
+    res.status(500).json({ 
+      status: "error", 
+      message: "Health check failed",
+      error: error.message 
+    });
+  }
 });
 
 app.use("/api/user",user_routes)
@@ -41,13 +63,15 @@ app.get("/:id",redirectFromShortUrl)
 
 app.use(errorHandler)
 
-connectDB();
-
 if(process.env.NODE_ENV !== "production"){
   const PORT = process.env.PORT || 3000;
   app.listen(PORT,()=>{
+      connectDB();
       console.log(`Server running on port ${PORT}`);
   });
+} else {
+  // In production, connect to DB but don't start a server (Vercel handles this)
+  connectDB();
 }
 
 
