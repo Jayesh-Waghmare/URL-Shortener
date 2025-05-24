@@ -15,10 +15,8 @@ A full-stack URL shortener application built with React, Node.js, Express, and M
 - URL shortening and redirection
 - User registration and login
 - Authenticated URL management
-- Expiry time and custom aliases (if implemented)
 - JWT-based authentication
 - TanStack Query for efficient data fetching and caching
-- Responsive UI
 
 ## 🛠 Tech Stack
 - **Frontend**: React, Tailwind CSS, TanStack Query
