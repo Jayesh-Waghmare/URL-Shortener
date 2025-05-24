@@ -11,7 +11,7 @@ import cors from "cors"
 import { attachUser } from "./src/utils/attachUser.js";
 import cookieParser from "cookie-parser"
 
-dotenv.config("./.env")
+dotenv.config()
 
 const app = express();
 
@@ -26,6 +26,10 @@ app.use(express.urlencoded({extended:true}))
 app.use(cookieParser())
 
 app.use(attachUser)
+
+app.get("/api/health", (req, res) => {
+  res.status(200).json({ status: "ok", message: "API is running" });
+});
 
 app.use("/api/user",user_routes)
 app.use("/api/auth",auth_routes)
